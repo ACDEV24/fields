@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:fields/app/config/config.dart';
+import 'package:fields/app/utils/log.dart';
 import 'package:fields/app/utils/toasts.dart';
 
 class ErrorsInterceptor extends Interceptor {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
-    AppConfig.logError(err, err.stackTrace);
+    AppLogger.error(err, err.stackTrace);
 
     if (err.response != null) {
       switch (err.response?.statusCode) {
