@@ -32,7 +32,7 @@ class _Logo extends StatelessWidget {
       from: 30,
       duration: const Duration(milliseconds: 500),
       controller: animate,
-      child: const WalletMessagesLogo(),
+      child: const FieldsLogo(),
     );
   }
 

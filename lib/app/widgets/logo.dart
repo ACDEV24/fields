@@ -1,11 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
-class WalletMessagesLogo extends StatelessWidget {
+class FieldsLogo extends StatelessWidget {
   final double? height;
   final double? width;
 
-  const WalletMessagesLogo({
+  const FieldsLogo({
     Key? key,
     this.height,
     this.width,

@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:fields/app/widgets/logo.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -22,11 +23,15 @@ class _Logo extends StatelessWidget {
       from: 30,
       duration: const Duration(milliseconds: 500),
       controller: animate,
-      child: const WalletMessagesLogo(),
+      child: const FieldsLogo(),
     );
   }
 
   void animate(AnimationController controller) {
+    Future.delayed(const Duration(seconds: 2), () {
+      Modular.to.navigate('/dashboard/');
+    });
+
     controller.addListener(
       () async {
         if (controller.isCompleted) {
