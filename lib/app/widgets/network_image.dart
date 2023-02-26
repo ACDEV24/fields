@@ -79,7 +79,7 @@ class _DefaultImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image(
       image: const AssetImage(
-        'assets/home/loading.gif',
+        'assets/loading.gif',
       ),
       height: height,
       width: width,

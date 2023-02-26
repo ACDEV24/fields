@@ -1,23 +1,31 @@
 class Field {
   final String uuid;
   final String name;
-  final String photo;
+  final String description;
+  final String image;
+  final double price;
 
   const Field({
     required this.uuid,
     required this.name,
-    required this.photo,
+    required this.description,
+    required this.image,
+    required this.price,
   });
 
   Field copyWith({
     String? uuid,
     String? name,
-    String? photo,
+    String? description,
+    String? image,
+    double? price,
   }) {
     return Field(
       uuid: uuid ?? this.uuid,
       name: name ?? this.name,
-      photo: photo ?? this.photo,
+      description: description ?? this.description,
+      image: image ?? this.image,
+      price: price ?? this.price,
     );
   }
 
@@ -25,7 +33,9 @@ class Field {
     return Field(
       uuid: json['uuid'] ?? '',
       name: json['name'] ?? '',
-      photo: json['photo'] ?? '',
+      description: json['description'] ?? '',
+      image: json['image'] ?? '',
+      price: json['price'] ?? '',
     );
   }
 
@@ -33,7 +43,8 @@ class Field {
     return {
       'uuid': uuid,
       'name': name,
-      'photo': photo,
+      'image': image,
+      'price': price,
     };
   }
 }

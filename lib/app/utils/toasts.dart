@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class WalletMessages {
+class Fields {
   static final ftoast = FToast();
 
   static void init() {

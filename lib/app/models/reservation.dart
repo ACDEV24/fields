@@ -1,13 +1,13 @@
 import 'package:fields/app/models/field.dart';
 
-class Bookings {
+class Reservation {
   final String uuid;
   final String userName;
   final String fieldUuid;
   final Field field;
   final DateTime date;
 
-  const Bookings({
+  const Reservation({
     required this.uuid,
     required this.userName,
     required this.fieldUuid,
@@ -15,14 +15,14 @@ class Bookings {
     required this.field,
   });
 
-  Bookings copyWith({
+  Reservation copyWith({
     String? uuid,
     String? userName,
     String? fieldUuid,
     DateTime? date,
     Field? field,
   }) {
-    return Bookings(
+    return Reservation(
       uuid: uuid ?? this.uuid,
       userName: userName ?? this.userName,
       fieldUuid: fieldUuid ?? this.fieldUuid,
@@ -31,8 +31,8 @@ class Bookings {
     );
   }
 
-  factory Bookings.fromJson(Map<String, dynamic> json) {
-    return Bookings(
+  factory Reservation.fromJson(Map<String, dynamic> json) {
+    return Reservation(
       uuid: json['uuid'] ?? '',
       userName: json['user_name'] ?? '',
       fieldUuid: json['field_uuid'] ?? '',

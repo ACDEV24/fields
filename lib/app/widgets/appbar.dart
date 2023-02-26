@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class WalletMessagesAppBar extends StatelessWidget with PreferredSizeWidget {
+class FieldsAppBar extends StatelessWidget with PreferredSizeWidget {
   final Widget? title;
-  const WalletMessagesAppBar({
+  const FieldsAppBar({
     Key? key,
     this.title,
   }) : super(key: key);

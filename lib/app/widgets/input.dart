@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fields/app/utils/theme.dart';
 
-class WalletMessagesInput extends StatelessWidget {
+class FieldsInput extends StatelessWidget {
   final String hintText;
   final String? initialValue;
   final void Function(String)? onChanged;
   final int? maxLength;
   final TextInputType? keyboardType;
   final bool justNumbers;
-  const WalletMessagesInput({
+  const FieldsInput({
     Key? key,
     required this.hintText,
     this.onChanged,

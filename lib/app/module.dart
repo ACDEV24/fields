@@ -1,3 +1,4 @@
+import 'package:fields/app/database/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fields/app/modules/dashboard/module.dart';
@@ -9,6 +10,11 @@ class AppModule extends Module {
   final List<Bind> binds = [
     Bind((i) => GlobalKey<NavigatorState>()),
     Bind((i) => Preferences()),
+    Bind(
+      (i) => DatabaseConfig()..init(),
+      isSingleton: true,
+      isLazy: false,
+    ),
   ];
 
   @override

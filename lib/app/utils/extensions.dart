@@ -1,8 +1,6 @@
 import 'dart:collection';
 import 'dart:math';
 
-import 'package:quiver/iterables.dart';
-
 extension StringExtension on String {
   String capitalize() {
     if (isEmpty) return '';
@@ -391,14 +389,6 @@ extension CollectionsExtensions<T> on Iterable<T> {
     set.removeAll(other);
     return set;
   }
-
-  /// Splits the Iterable into chunks of the specified size
-  ///
-  /// example:
-  /// [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].chunks(3))
-  /// result:
-  /// ([1, 2, 3], [4, 5, 6], [7, 8, 9], [10])
-  Iterable<List<T>> chunks(int size) => partition(this, size);
 
   /// Returns the first element matching the given [predicate], or `null`
   /// if element was not found.
