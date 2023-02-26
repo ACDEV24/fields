@@ -1,65 +1,60 @@
 part of 'bloc.dart';
 
 @immutable
-abstract class DashboardState extends Equatable {
+abstract class ReservationState extends Equatable {
   final Model model;
-  const DashboardState(this.model);
+  const ReservationState(this.model);
 
   @override
   List<Object> get props => [model];
 }
 
-class InitialState extends DashboardState {
+class InitialState extends ReservationState {
   const InitialState(Model model) : super(model);
 }
 
-class LoadingFieldsState extends DashboardState {
-  const LoadingFieldsState(Model model) : super(model);
+class LoadingWeatherState extends ReservationState {
+  const LoadingWeatherState(Model model) : super(model);
 }
 
-class LoadedFieldsState extends DashboardState {
-  const LoadedFieldsState(Model model) : super(model);
+class LoadedWeatherState extends ReservationState {
+  const LoadedWeatherState(Model model) : super(model);
 }
 
-class ErrorLoadingFieldsState extends DashboardState {
-  const ErrorLoadingFieldsState(Model model) : super(model);
+class ErrorLoadingWeatherState extends ReservationState {
+  const ErrorLoadingWeatherState(Model model) : super(model);
 }
 
-class LoadingReservationsState extends DashboardState {
+class LoadingReservationsState extends ReservationState {
   const LoadingReservationsState(Model model) : super(model);
 }
 
-class LoadedReservationsState extends DashboardState {
+class LoadedReservationsState extends ReservationState {
   const LoadedReservationsState(Model model) : super(model);
 }
 
-class ErrorLoadingReservationsState extends DashboardState {
+class ErrorLoadingReservationsState extends ReservationState {
   const ErrorLoadingReservationsState(Model model) : super(model);
 }
 
 class Model extends Equatable {
-  final List<Field> fields;
-  final List<Reservation> reservations;
+  final Weather? weather;
   const Model({
-    this.fields = const [],
-    this.reservations = const [],
+    this.weather,
   });
 
   Model copyWith({
-    List<Field>? fields,
-    List<Reservation>? reservations,
+    Weather? weather,
   }) {
     return Model(
-      fields: fields ?? this.fields,
-      reservations: reservations ?? this.reservations,
+      weather: weather ?? this.weather,
     );
   }
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
-      fields,
-      reservations,
+      weather,
     ];
   }
 }

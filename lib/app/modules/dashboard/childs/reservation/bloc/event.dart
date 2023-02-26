@@ -1,16 +1,13 @@
 part of 'bloc.dart';
 
-abstract class DashboardEvent extends Equatable {
-  const DashboardEvent();
+abstract class ReservationEvent extends Equatable {
+  const ReservationEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class LoadFieldsEvent extends DashboardEvent {
-  const LoadFieldsEvent();
-}
-
-class LoadReservationsEvent extends DashboardEvent {
-  const LoadReservationsEvent();
+class LoadWeatherEvent extends ReservationEvent {
+  final String date;
+  const LoadWeatherEvent(this.date);
 }

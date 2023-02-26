@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:fields/app/database/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -8,12 +9,23 @@ import 'package:fields/app/utils/preferences.dart';
 class AppModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => GlobalKey<NavigatorState>()),
-    Bind((i) => Preferences()),
     Bind(
       (i) => DatabaseConfig()..init(),
       isSingleton: true,
       isLazy: false,
+    ),
+    Bind((i) => GlobalKey<NavigatorState>()),
+    Bind((i) => Preferences()),
+    Bind(
+      (i) => Dio(
+        BaseOptions(
+          responseType: ResponseType.json,
+          contentType: 'application/json',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      ),
     ),
   ];
 

@@ -3,15 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:fields/app/utils/theme.dart';
 
 class FieldsInput extends StatelessWidget {
+  final TextEditingController? controller;
   final String hintText;
   final String? initialValue;
   final void Function(String)? onChanged;
   final int? maxLength;
   final TextInputType? keyboardType;
   final bool justNumbers;
+
   const FieldsInput({
     Key? key,
     required this.hintText,
+    this.controller,
     this.onChanged,
     this.maxLength,
     this.keyboardType,
@@ -30,6 +33,7 @@ class FieldsInput extends StatelessWidget {
     );
 
     return TextFormField(
+      controller: controller,
       initialValue: initialValue,
       keyboardType: keyboardType,
       decoration: InputDecoration(

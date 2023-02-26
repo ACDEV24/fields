@@ -150,7 +150,7 @@ class _Field extends StatelessWidget {
                       text: TextSpan(
                         text: 'Precio: ',
                         style: const TextStyle(
-                          fontSize: 16.0,
+                          fontSize: 14.0,
                           color: Colors.black,
                         ),
                         children: [
