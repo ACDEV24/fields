@@ -22,7 +22,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   void _loadFieldsEvent(
-      LoadFieldsEvent event, Emitter<DashboardState> emit) async {
+    LoadFieldsEvent event,
+    Emitter<DashboardState> emit,
+  ) async {
     emit(LoadingFieldsState(state.model));
 
     try {
@@ -41,7 +43,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }
 
   void _loadReservationsEvent(
-      LoadReservationsEvent event, Emitter<DashboardState> emit) async {
+    LoadReservationsEvent event,
+    Emitter<DashboardState> emit,
+  ) async {
     emit(LoadingReservationsState(state.model));
 
     try {
