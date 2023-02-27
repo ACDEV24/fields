@@ -1,610 +1,176 @@
 class Weather {
-  final Location location;
-  final Forecast forecast;
+  final double latitude;
+  final double longitude;
+  final double generationtimeMs;
+  final num utcOffsetSeconds;
+  final String timezone;
+  final String timezoneAbbreviation;
+  final num elevation;
+  final HourlyUnits hourlyUnits;
+  final Hourly hourly;
 
   const Weather({
-    required this.location,
-    required this.forecast,
+    required this.latitude,
+    required this.longitude,
+    required this.generationtimeMs,
+    required this.utcOffsetSeconds,
+    required this.timezone,
+    required this.timezoneAbbreviation,
+    required this.elevation,
+    required this.hourlyUnits,
+    required this.hourly,
   });
 
   Weather copyWith({
-    Location? location,
-    Forecast? forecast,
+    double? latitude,
+    double? longitude,
+    double? generationtimeMs,
+    num? utcOffsetSeconds,
+    String? timezone,
+    String? timezoneAbbreviation,
+    num? elevation,
+    HourlyUnits? hourlyUnits,
+    Hourly? hourly,
   }) {
     return Weather(
-      location: location ?? this.location,
-      forecast: forecast ?? this.forecast,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      generationtimeMs: generationtimeMs ?? this.generationtimeMs,
+      utcOffsetSeconds: utcOffsetSeconds ?? this.utcOffsetSeconds,
+      timezone: timezone ?? this.timezone,
+      timezoneAbbreviation: timezoneAbbreviation ?? this.timezoneAbbreviation,
+      elevation: elevation ?? this.elevation,
+      hourlyUnits: hourlyUnits ?? this.hourlyUnits,
+      hourly: hourly ?? this.hourly,
     );
   }
 
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
-      location: Location.fromJson(json['location']),
-      forecast: Forecast.fromJson(json['forecast']),
+      latitude: json['latitude']?.toDouble(),
+      longitude: json['longitude']?.toDouble(),
+      generationtimeMs: json['generationtime_ms']?.toDouble(),
+      utcOffsetSeconds: json['utc_offset_seconds'],
+      timezone: json['timezone'],
+      timezoneAbbreviation: json['timezone_abbreviation'],
+      elevation: json['elevation'],
+      hourlyUnits: HourlyUnits.fromJson(json['hourly_units'] ?? {}),
+      hourly: Hourly.fromJson(json['hourly'] ?? {}),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'location': location.toJson(),
-      'forecast': forecast.toJson(),
+      'latitude': latitude,
+      'longitude': longitude,
+      'generationtime_ms': generationtimeMs,
+      'utc_offset_seconds': utcOffsetSeconds,
+      'timezone': timezone,
+      'timezone_abbreviation': timezoneAbbreviation,
+      'elevation': elevation,
+      'hourly_units': hourlyUnits.toJson(),
+      'hourly': hourly.toJson(),
     };
   }
 }
 
-class Forecast {
-  final List<Forecastday> forecastday;
+class Hourly {
+  final List<DateTime?> time;
+  final List<double?> temperature2M;
+  final List<num?> precipitationProbability;
 
-  const Forecast({
-    required this.forecastday,
+  const Hourly({
+    this.time = const [],
+    this.temperature2M = const [],
+    this.precipitationProbability = const [],
   });
 
-  Forecast copyWith({
-    List<Forecastday>? forecastday,
+  Hourly copyWith({
+    List<DateTime>? time,
+    List<double>? temperature2M,
+    List<num>? precipitationProbability,
   }) {
-    return Forecast(
-      forecastday: forecastday ?? this.forecastday,
+    return Hourly(
+      time: time ?? this.time,
+      temperature2M: temperature2M ?? this.temperature2M,
+      precipitationProbability:
+          precipitationProbability ?? this.precipitationProbability,
     );
   }
 
-  factory Forecast.fromJson(Map<String, dynamic> json) {
-    return Forecast(
-      forecastday: List<Forecastday>.from(
-        json['forecastday'].map((x) => Forecastday.fromJson(x)),
+  factory Hourly.fromJson(Map<String, dynamic> json) {
+    return Hourly(
+      time: List<DateTime>.from(
+        (json['time'] ?? []).map(
+          (x) => DateTime.tryParse(x),
+        ),
+      ),
+      temperature2M: List<double?>.from(
+        (json['temperature_2m'] ?? []).map(
+          (x) => x?.toDouble(),
+        ),
+      ),
+      precipitationProbability: List<num?>.from(
+        (json['precipitation_probability'] ?? []).map(
+          (x) => x,
+        ),
       ),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'forecastday': List<dynamic>.from(forecastday.map((x) => x.toJson())),
+      'time': List<dynamic>.from(time.map((x) => x)),
+      'temperature_2m': List<dynamic>.from(temperature2M.map((x) => x)),
+      'precipitation_probability':
+          List<dynamic>.from(precipitationProbability.map((x) => x)),
     };
   }
 }
 
-class Forecastday {
-  final DateTime date;
-  final int dateEpoch;
-  final Day day;
-  final Astro astro;
-  final List<Hour> hour;
-
-  const Forecastday({
-    required this.date,
-    required this.dateEpoch,
-    required this.day,
-    required this.astro,
-    required this.hour,
-  });
-
-  Forecastday copyWith({
-    DateTime? date,
-    int? dateEpoch,
-    Day? day,
-    Astro? astro,
-    List<Hour>? hour,
-  }) {
-    return Forecastday(
-      date: date ?? this.date,
-      dateEpoch: dateEpoch ?? this.dateEpoch,
-      day: day ?? this.day,
-      astro: astro ?? this.astro,
-      hour: hour ?? this.hour,
-    );
-  }
-
-  factory Forecastday.fromJson(Map<String, dynamic> json) {
-    return Forecastday(
-      date: DateTime.parse(json['date']),
-      dateEpoch: json['date_epoch'],
-      day: Day.fromJson(json['day']),
-      astro: Astro.fromJson(json['astro']),
-      hour: List<Hour>.from(json['hour'].map((x) => Hour.fromJson(x))),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'date':
-          '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}',
-      'date_epoch': dateEpoch,
-      'day': day.toJson(),
-      'astro': astro.toJson(),
-      'hour': List<dynamic>.from(hour.map((x) => x.toJson())),
-    };
-  }
-}
-
-class Astro {
-  final String sunrise;
-  final String sunset;
-  final String moonrise;
-  final String moonset;
-  final String moonPhase;
-  final String moonIllumination;
-
-  const Astro({
-    required this.sunrise,
-    required this.sunset,
-    required this.moonrise,
-    required this.moonset,
-    required this.moonPhase,
-    required this.moonIllumination,
-  });
-
-  Astro copyWith({
-    String? sunrise,
-    String? sunset,
-    String? moonrise,
-    String? moonset,
-    String? moonPhase,
-    String? moonIllumination,
-  }) {
-    return Astro(
-      sunrise: sunrise ?? this.sunrise,
-      sunset: sunset ?? this.sunset,
-      moonrise: moonrise ?? this.moonrise,
-      moonset: moonset ?? this.moonset,
-      moonPhase: moonPhase ?? this.moonPhase,
-      moonIllumination: moonIllumination ?? this.moonIllumination,
-    );
-  }
-
-  factory Astro.fromJson(Map<String, dynamic> json) {
-    return Astro(
-      sunrise: json['sunrise'],
-      sunset: json['sunset'],
-      moonrise: json['moonrise'],
-      moonset: json['moonset'],
-      moonPhase: json['moon_phase'],
-      moonIllumination: json['moon_illumination'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'sunrise': sunrise,
-      'sunset': sunset,
-      'moonrise': moonrise,
-      'moonset': moonset,
-      'moon_phase': moonPhase,
-      'moon_illumination': moonIllumination,
-    };
-  }
-}
-
-class Day {
-  final double maxtempC;
-  final double maxtempF;
-  final double mintempC;
-  final double mintempF;
-  final double avgtempC;
-  final double avgtempF;
-  final double maxwindMph;
-  final double maxwindKph;
-  final double totalprecipMm;
-  final double totalprecipIn;
-  final double avgvisKm;
-  final int avgvisMiles;
-  final int avghumidity;
-  final Condition condition;
-  final int uv;
-
-  const Day({
-    required this.maxtempC,
-    required this.maxtempF,
-    required this.mintempC,
-    required this.mintempF,
-    required this.avgtempC,
-    required this.avgtempF,
-    required this.maxwindMph,
-    required this.maxwindKph,
-    required this.totalprecipMm,
-    required this.totalprecipIn,
-    required this.avgvisKm,
-    required this.avgvisMiles,
-    required this.avghumidity,
-    required this.condition,
-    required this.uv,
-  });
-
-  Day copyWith({
-    double? maxtempC,
-    double? maxtempF,
-    double? mintempC,
-    double? mintempF,
-    double? avgtempC,
-    double? avgtempF,
-    double? maxwindMph,
-    double? maxwindKph,
-    double? totalprecipMm,
-    double? totalprecipIn,
-    double? avgvisKm,
-    int? avgvisMiles,
-    int? avghumidity,
-    Condition? condition,
-    int? uv,
-  }) {
-    return Day(
-      maxtempC: maxtempC ?? this.maxtempC,
-      maxtempF: maxtempF ?? this.maxtempF,
-      mintempC: mintempC ?? this.mintempC,
-      mintempF: mintempF ?? this.mintempF,
-      avgtempC: avgtempC ?? this.avgtempC,
-      avgtempF: avgtempF ?? this.avgtempF,
-      maxwindMph: maxwindMph ?? this.maxwindMph,
-      maxwindKph: maxwindKph ?? this.maxwindKph,
-      totalprecipMm: totalprecipMm ?? this.totalprecipMm,
-      totalprecipIn: totalprecipIn ?? this.totalprecipIn,
-      avgvisKm: avgvisKm ?? this.avgvisKm,
-      avgvisMiles: avgvisMiles ?? this.avgvisMiles,
-      avghumidity: avghumidity ?? this.avghumidity,
-      condition: condition ?? this.condition,
-      uv: uv ?? this.uv,
-    );
-  }
-
-  factory Day.fromJson(Map<String, dynamic> json) {
-    return Day(
-      maxtempC: json['maxtemp_c']?.toDouble(),
-      maxtempF: json['maxtemp_f']?.toDouble(),
-      mintempC: json['mintemp_c']?.toDouble(),
-      mintempF: json['mintemp_f']?.toDouble(),
-      avgtempC: json['avgtemp_c']?.toDouble(),
-      avgtempF: json['avgtemp_f']?.toDouble(),
-      maxwindMph: json['maxwind_mph']?.toDouble(),
-      maxwindKph: json['maxwind_kph']?.toDouble(),
-      totalprecipMm: json['totalprecip_mm']?.toDouble(),
-      totalprecipIn: json['totalprecip_in']?.toDouble(),
-      avgvisKm: json['avgvis_km']?.toDouble(),
-      avgvisMiles: json['avgvis_miles'],
-      avghumidity: json['avghumidity'],
-      condition: Condition.fromJson(json['condition']),
-      uv: json['uv'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'maxtemp_c': maxtempC,
-      'maxtemp_f': maxtempF,
-      'mintemp_c': mintempC,
-      'mintemp_f': mintempF,
-      'avgtemp_c': avgtempC,
-      'avgtemp_f': avgtempF,
-      'maxwind_mph': maxwindMph,
-      'maxwind_kph': maxwindKph,
-      'totalprecip_mm': totalprecipMm,
-      'totalprecip_in': totalprecipIn,
-      'avgvis_km': avgvisKm,
-      'avgvis_miles': avgvisMiles,
-      'avghumidity': avghumidity,
-      'condition': condition.toJson(),
-      'uv': uv,
-    };
-  }
-}
-
-class Condition {
-  final String text;
-  final String icon;
-  final int code;
-
-  const Condition({
-    required this.text,
-    required this.icon,
-    required this.code,
-  });
-
-  Condition copyWith({
-    String? text,
-    String? icon,
-    int? code,
-  }) {
-    return Condition(
-      text: text ?? this.text,
-      icon: icon ?? this.icon,
-      code: code ?? this.code,
-    );
-  }
-
-  factory Condition.fromJson(Map<String, dynamic> json) {
-    return Condition(
-      text: json['text'],
-      icon: json['icon'],
-      code: json['code'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'text': text,
-      'icon': icon,
-      'code': code,
-    };
-  }
-}
-
-class Hour {
-  final int timeEpoch;
+class HourlyUnits {
   final String time;
-  final double tempC;
-  final double tempF;
-  final int isDay;
-  final Condition condition;
-  final double windMph;
-  final double windKph;
-  final int windDegree;
-  final String windDir;
-  final int pressureMb;
-  final double pressureIn;
-  final double precipMm;
-  final double precipIn;
-  final int humidity;
-  final int cloud;
-  final double feelslikeC;
-  final double feelslikeF;
-  final double windchillC;
-  final double windchillF;
-  final double heatindexC;
-  final double heatindexF;
-  final double dewpointC;
-  final double dewpointF;
-  final int willItRain;
-  final int chanceOfRain;
-  final int willItSnow;
-  final int chanceOfSnow;
-  final double visKm;
-  final int visMiles;
-  final double gustMph;
-  final double gustKph;
+  final String temperature2M;
+  final String precipitationProbability;
+  final String precipitation;
 
-  const Hour({
-    required this.timeEpoch,
+  const HourlyUnits({
     required this.time,
-    required this.tempC,
-    required this.tempF,
-    required this.isDay,
-    required this.condition,
-    required this.windMph,
-    required this.windKph,
-    required this.windDegree,
-    required this.windDir,
-    required this.pressureMb,
-    required this.pressureIn,
-    required this.precipMm,
-    required this.precipIn,
-    required this.humidity,
-    required this.cloud,
-    required this.feelslikeC,
-    required this.feelslikeF,
-    required this.windchillC,
-    required this.windchillF,
-    required this.heatindexC,
-    required this.heatindexF,
-    required this.dewpointC,
-    required this.dewpointF,
-    required this.willItRain,
-    required this.chanceOfRain,
-    required this.willItSnow,
-    required this.chanceOfSnow,
-    required this.visKm,
-    required this.visMiles,
-    required this.gustMph,
-    required this.gustKph,
+    required this.temperature2M,
+    required this.precipitationProbability,
+    required this.precipitation,
   });
 
-  Hour copyWith({
-    int? timeEpoch,
+  HourlyUnits copyWith({
     String? time,
-    double? tempC,
-    double? tempF,
-    int? isDay,
-    Condition? condition,
-    double? windMph,
-    double? windKph,
-    int? windDegree,
-    String? windDir,
-    int? pressureMb,
-    double? pressureIn,
-    double? precipMm,
-    double? precipIn,
-    int? humidity,
-    int? cloud,
-    double? feelslikeC,
-    double? feelslikeF,
-    double? windchillC,
-    double? windchillF,
-    double? heatindexC,
-    double? heatindexF,
-    double? dewpointC,
-    double? dewpointF,
-    int? willItRain,
-    int? chanceOfRain,
-    int? willItSnow,
-    int? chanceOfSnow,
-    double? visKm,
-    int? visMiles,
-    double? gustMph,
-    double? gustKph,
+    String? temperature2M,
+    String? precipitationProbability,
+    String? precipitation,
   }) {
-    return Hour(
-      timeEpoch: timeEpoch ?? this.timeEpoch,
+    return HourlyUnits(
       time: time ?? this.time,
-      tempC: tempC ?? this.tempC,
-      tempF: tempF ?? this.tempF,
-      isDay: isDay ?? this.isDay,
-      condition: condition ?? this.condition,
-      windMph: windMph ?? this.windMph,
-      windKph: windKph ?? this.windKph,
-      windDegree: windDegree ?? this.windDegree,
-      windDir: windDir ?? this.windDir,
-      pressureMb: pressureMb ?? this.pressureMb,
-      pressureIn: pressureIn ?? this.pressureIn,
-      precipMm: precipMm ?? this.precipMm,
-      precipIn: precipIn ?? this.precipIn,
-      humidity: humidity ?? this.humidity,
-      cloud: cloud ?? this.cloud,
-      feelslikeC: feelslikeC ?? this.feelslikeC,
-      feelslikeF: feelslikeF ?? this.feelslikeF,
-      windchillC: windchillC ?? this.windchillC,
-      windchillF: windchillF ?? this.windchillF,
-      heatindexC: heatindexC ?? this.heatindexC,
-      heatindexF: heatindexF ?? this.heatindexF,
-      dewpointC: dewpointC ?? this.dewpointC,
-      dewpointF: dewpointF ?? this.dewpointF,
-      willItRain: willItRain ?? this.willItRain,
-      chanceOfRain: chanceOfRain ?? this.chanceOfRain,
-      willItSnow: willItSnow ?? this.willItSnow,
-      chanceOfSnow: chanceOfSnow ?? this.chanceOfSnow,
-      visKm: visKm ?? this.visKm,
-      visMiles: visMiles ?? this.visMiles,
-      gustMph: gustMph ?? this.gustMph,
-      gustKph: gustKph ?? this.gustKph,
+      temperature2M: temperature2M ?? this.temperature2M,
+      precipitationProbability:
+          precipitationProbability ?? this.precipitationProbability,
+      precipitation: precipitation ?? this.precipitation,
     );
   }
 
-  factory Hour.fromJson(Map<String, dynamic> json) {
-    return Hour(
-      timeEpoch: json['time_epoch'],
-      time: json['time'],
-      tempC: json['temp_c']?.toDouble(),
-      tempF: json['temp_f']?.toDouble(),
-      isDay: json['is_day'],
-      condition: Condition.fromJson(json['condition']),
-      windMph: json['wind_mph']?.toDouble(),
-      windKph: json['wind_kph']?.toDouble(),
-      windDegree: json['wind_degree'],
-      windDir: json['wind_dir'],
-      pressureMb: json['pressure_mb'],
-      pressureIn: json['pressure_in']?.toDouble(),
-      precipMm: json['precip_mm']?.toDouble(),
-      precipIn: json['precip_in']?.toDouble(),
-      humidity: json['humidity'],
-      cloud: json['cloud'],
-      feelslikeC: json['feelslike_c']?.toDouble(),
-      feelslikeF: json['feelslike_f']?.toDouble(),
-      windchillC: json['windchill_c']?.toDouble(),
-      windchillF: json['windchill_f']?.toDouble(),
-      heatindexC: json['heatindex_c']?.toDouble(),
-      heatindexF: json['heatindex_f']?.toDouble(),
-      dewpointC: json['dewpoint_c']?.toDouble(),
-      dewpointF: json['dewpoint_f']?.toDouble(),
-      willItRain: json['will_it_rain'],
-      chanceOfRain: json['chance_of_rain'],
-      willItSnow: json['will_it_snow'],
-      chanceOfSnow: json['chance_of_snow'],
-      visKm: json['vis_km']?.toDouble(),
-      visMiles: json['vis_miles'],
-      gustMph: json['gust_mph']?.toDouble(),
-      gustKph: json['gust_kph']?.toDouble(),
+  factory HourlyUnits.fromJson(Map<String, dynamic> json) {
+    return HourlyUnits(
+      time: json['time'] ?? '',
+      temperature2M: json['temperature_2m'] ?? '',
+      precipitationProbability: json['precipitation_probability'] ?? '',
+      precipitation: json['precipitation'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'time_epoch': timeEpoch,
       'time': time,
-      'temp_c': tempC,
-      'temp_f': tempF,
-      'is_day': isDay,
-      'condition': condition.toJson(),
-      'wind_mph': windMph,
-      'wind_kph': windKph,
-      'wind_degree': windDegree,
-      'wind_dir': windDir,
-      'pressure_mb': pressureMb,
-      'pressure_in': pressureIn,
-      'precip_mm': precipMm,
-      'precip_in': precipIn,
-      'humidity': humidity,
-      'cloud': cloud,
-      'feelslike_c': feelslikeC,
-      'feelslike_f': feelslikeF,
-      'windchill_c': windchillC,
-      'windchill_f': windchillF,
-      'heatindex_c': heatindexC,
-      'heatindex_f': heatindexF,
-      'dewpoint_c': dewpointC,
-      'dewpoint_f': dewpointF,
-      'will_it_rain': willItRain,
-      'chance_of_rain': chanceOfRain,
-      'will_it_snow': willItSnow,
-      'chance_of_snow': chanceOfSnow,
-      'vis_km': visKm,
-      'vis_miles': visMiles,
-      'gust_mph': gustMph,
-      'gust_kph': gustKph,
-    };
-  }
-}
-
-class Location {
-  final String name;
-  final String region;
-  final String country;
-  final double lat;
-  final double lon;
-  final String tzId;
-  final int localtimeEpoch;
-  final String localtime;
-
-  const Location({
-    required this.name,
-    required this.region,
-    required this.country,
-    required this.lat,
-    required this.lon,
-    required this.tzId,
-    required this.localtimeEpoch,
-    required this.localtime,
-  });
-
-  Location copyWith({
-    String? name,
-    String? region,
-    String? country,
-    double? lat,
-    double? lon,
-    String? tzId,
-    int? localtimeEpoch,
-    String? localtime,
-  }) {
-    return Location(
-      name: name ?? this.name,
-      region: region ?? this.region,
-      country: country ?? this.country,
-      lat: lat ?? this.lat,
-      lon: lon ?? this.lon,
-      tzId: tzId ?? this.tzId,
-      localtimeEpoch: localtimeEpoch ?? this.localtimeEpoch,
-      localtime: localtime ?? this.localtime,
-    );
-  }
-
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
-      name: json['name'],
-      region: json['region'],
-      country: json['country'],
-      lat: json['lat']?.toDouble(),
-      lon: json['lon']?.toDouble(),
-      tzId: json['tz_id'],
-      localtimeEpoch: json['localtime_epoch'],
-      localtime: json['localtime'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'region': region,
-      'country': country,
-      'lat': lat,
-      'lon': lon,
-      'tz_id': tzId,
-      'localtime_epoch': localtimeEpoch,
-      'localtime': localtime,
+      'temperature_2m': temperature2M,
+      'precipitation_probability': precipitationProbability,
+      'precipitation': precipitation,
     };
   }
 }

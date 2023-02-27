@@ -1,5 +1,7 @@
+import 'package:fields/app/models/field.dart';
 import 'package:fields/app/models/weather.dart';
 import 'package:fields/app/modules/dashboard/childs/reservation/repository.dart';
+import 'package:fields/app/utils/log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -15,6 +17,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
   }) : super(const InitialState(Model())) {
     on<LoadWeatherEvent>(_loadWeatherEvent);
     on<ChangeDateEvent>(_changeDateEvent);
+    on<ChangeFieldEvent>(_changeFieldEvent);
   }
 
   void _loadWeatherEvent(
@@ -33,9 +36,23 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
           ),
         ),
       );
-    } catch (_) {
+    } catch (error, stackTrace) {
+      AppLogger.error(error, stackTrace);
       emit(ErrorLoadingWeatherState(state.model));
     }
+  }
+
+  void _changeFieldEvent(
+    ChangeFieldEvent event,
+    Emitter<ReservationState> emit,
+  ) async {
+    emit(
+      ChangedFieldState(
+        state.model.copyWith(
+          field: event.field,
+        ),
+      ),
+    );
   }
 
   void _changeDateEvent(

@@ -440,4 +440,16 @@ extension Format on DateTime {
   String get format {
     return '$day-$month-$year';
   }
+
+  String get formatYYYYMMDD {
+    final month = this.month.toString().padLeft(2, '0');
+    final day = this.day.toString().padLeft(2, '0');
+    return '$year-$month-$day';
+  }
+
+  String get time {
+    final hour = this.hour.toString().padLeft(2, '0');
+    final minute = this.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
 }

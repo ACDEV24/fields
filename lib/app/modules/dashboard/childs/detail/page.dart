@@ -85,16 +85,15 @@ class _Background extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: Uncomment
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () {
+        context
+            .read<FieldDetailBloc>()
+            .add(const ChangeDetailVisibitilyEvent());
+      },
+    );
 
-    // Future.delayed(
-    //   const Duration(milliseconds: 500),
-    //   () {
-    //     context
-    //         .read<FieldDetailBloc>()
-    //         .add(const ChangeDetailVisibitilyEvent());
-    //   },
-    // );
     return GestureDetector(
       onTap: () {
         context

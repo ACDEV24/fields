@@ -37,23 +37,31 @@ class ErrorLoadingReservationsState extends ReservationState {
   const ErrorLoadingReservationsState(Model model) : super(model);
 }
 
+class ChangedFieldState extends ReservationState {
+  const ChangedFieldState(Model model) : super(model);
+}
+
 class ChangedDateState extends ReservationState {
   const ChangedDateState(Model model) : super(model);
 }
 
 class Model extends Equatable {
+  final Field? field;
   final Weather? weather;
   final DateTime? date;
   const Model({
+    this.field,
     this.weather,
     this.date,
   });
 
   Model copyWith({
+    Field? field,
     Weather? weather,
     DateTime? date,
   }) {
     return Model(
+      field: field ?? this.field,
       weather: weather ?? this.weather,
       date: date ?? this.date,
     );
@@ -62,6 +70,7 @@ class Model extends Equatable {
   @override
   List<Object?> get props {
     return [
+      field,
       weather,
       date,
     ];

@@ -9,9 +9,11 @@ class ReservationWeatherRepository {
   });
 
   Future<Weather> getWeather(String date) async {
-    const apiKey = '702cc876c90d4a5bac9202423232602';
-    const host = 'https://api.weatherapi.com';
-    final url = '$host/v1/future.json?key=$apiKey&q=Colombia&dt=$date';
+    const host = 'https://api.open-meteo.com';
+    const latLong = 'latitude=4.61&longitude=-74.08';
+    const hourly = 'temperature_2m,precipitation_probability';
+    final startAndEnd = 'start_date=$date&end_date=$date';
+    final url = '$host/v1/forecast?$latLong&hourly=$hourly&$startAndEnd';
 
     final response = await dio.get(url);
 

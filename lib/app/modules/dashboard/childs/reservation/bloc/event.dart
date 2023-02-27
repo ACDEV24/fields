@@ -12,6 +12,11 @@ class LoadWeatherEvent extends ReservationEvent {
   const LoadWeatherEvent(this.date);
 }
 
+class ChangeFieldEvent extends ReservationEvent {
+  final Field field;
+  const ChangeFieldEvent(this.field);
+}
+
 class ChangeDateEvent extends ReservationEvent {
   final DateTime date;
   const ChangeDateEvent(this.date);

@@ -5,6 +5,7 @@ import 'package:fields/app/modules/dashboard/childs/detail/page.dart';
 import 'package:fields/app/modules/dashboard/childs/reservation/bloc/bloc.dart';
 import 'package:fields/app/modules/dashboard/childs/reservation/page.dart';
 import 'package:fields/app/modules/dashboard/childs/reservation/repository.dart';
+import 'package:fields/app/modules/dashboard/childs/select/page.dart';
 import 'package:fields/app/modules/dashboard/repositories/reservations/repository.dart';
 import 'package:fields/app/modules/dashboard/repositories/reservations/service.dart';
 import 'package:fields/app/modules/dashboard/repositories/fields/repository.dart';
@@ -57,6 +58,10 @@ class DashboardModule extends Module {
       child: (context, args) => ReservationPage(
         field: args.data as Field,
       ),
+    ),
+    ChildRoute(
+      '/field/select',
+      child: (context, args) => const SelectFieldPage(),
     ),
   ];
 }
