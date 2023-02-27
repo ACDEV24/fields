@@ -113,10 +113,13 @@ class _Field extends StatelessWidget {
                 topRight: Radius.zero,
                 bottomRight: Radius.zero,
               ),
-              child: CachedImage(
-                url: field.image,
-                width: 150,
-                height: double.infinity,
+              child: Hero(
+                tag: field.uuid,
+                child: CachedImage(
+                  url: field.image,
+                  width: 150,
+                  height: double.infinity,
+                ),
               ),
             ),
             Expanded(
@@ -180,14 +183,18 @@ class _Reservations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 10,
-      physics: const BouncingScrollPhysics(
-        parent: AlwaysScrollableScrollPhysics(),
-      ),
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text('Reservación $index'),
+    return BlocBuilder<DashboardBloc, DashboardState>(
+      builder: (context, state) {
+        return ListView.builder(
+          itemCount: state.model.reservations.length,
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text('Reservación $index'),
+            );
+          },
         );
       },
     );

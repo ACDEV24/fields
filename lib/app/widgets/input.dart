@@ -10,6 +10,9 @@ class FieldsInput extends StatelessWidget {
   final int? maxLength;
   final TextInputType? keyboardType;
   final bool justNumbers;
+  final VoidCallback? onTap;
+  final bool enabled;
+  final bool hasFocus;
 
   const FieldsInput({
     Key? key,
@@ -19,7 +22,10 @@ class FieldsInput extends StatelessWidget {
     this.maxLength,
     this.keyboardType,
     this.initialValue,
+    this.onTap,
     this.justNumbers = false,
+    this.enabled = true,
+    this.hasFocus = true,
   }) : super(key: key);
 
   @override
@@ -36,6 +42,7 @@ class FieldsInput extends StatelessWidget {
       controller: controller,
       initialValue: initialValue,
       keyboardType: keyboardType,
+      focusNode: hasFocus ? null : AlwaysDisabledFocusNode(),
       decoration: InputDecoration(
         hintText: hintText,
         filled: true,
@@ -49,6 +56,9 @@ class FieldsInput extends StatelessWidget {
         disabledBorder: border,
         enabledBorder: border,
         errorBorder: border,
+        alignLabelWithHint: true,
+        enabled: enabled,
+        label: Text(hintText),
         focusedErrorBorder: border,
         hintStyle: const TextStyle(
           color: Colors.black54,
@@ -64,6 +74,12 @@ class FieldsInput extends StatelessWidget {
         LengthLimitingTextInputFormatter(maxLength),
       ],
       onChanged: onChanged,
+      onTap: onTap,
     );
   }
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
 }

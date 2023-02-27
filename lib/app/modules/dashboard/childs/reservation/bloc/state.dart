@@ -37,17 +37,25 @@ class ErrorLoadingReservationsState extends ReservationState {
   const ErrorLoadingReservationsState(Model model) : super(model);
 }
 
+class ChangedDateState extends ReservationState {
+  const ChangedDateState(Model model) : super(model);
+}
+
 class Model extends Equatable {
   final Weather? weather;
+  final DateTime? date;
   const Model({
     this.weather,
+    this.date,
   });
 
   Model copyWith({
     Weather? weather,
+    DateTime? date,
   }) {
     return Model(
       weather: weather ?? this.weather,
+      date: date ?? this.date,
     );
   }
 
@@ -55,6 +63,7 @@ class Model extends Equatable {
   List<Object?> get props {
     return [
       weather,
+      date,
     ];
   }
 }

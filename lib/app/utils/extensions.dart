@@ -435,3 +435,9 @@ class _IndexedWhereIterator<E> extends Iterator<E> {
   @override
   E get current => _iterator.current;
 }
+
+extension Format on DateTime {
+  String get format {
+    return '$day-$month-$year';
+  }
+}

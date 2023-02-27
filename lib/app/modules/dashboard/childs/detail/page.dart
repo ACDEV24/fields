@@ -140,13 +140,8 @@ class _Detail extends StatelessWidget {
     return BlocBuilder<FieldDetailBloc, FieldDetailState>(
       builder: (context, state) {
         return TranslationAnimatedWidget(
-          enabled: state.model
-              .visible, //update this boolean to forward/reverse the animation
-          values: const [
-            Offset(0, 500), // disabled value value
-            Offset(0, 250), //intermediate value
-            Offset(0, 0) //enabled value
-          ],
+          enabled: state.model.visible,
+          values: const [Offset(0, 500), Offset(0, 250), Offset(0, 0)],
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Container(

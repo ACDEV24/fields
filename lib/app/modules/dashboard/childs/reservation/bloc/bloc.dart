@@ -14,6 +14,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
     required this.repository,
   }) : super(const InitialState(Model())) {
     on<LoadWeatherEvent>(_loadWeatherEvent);
+    on<ChangeDateEvent>(_changeDateEvent);
   }
 
   void _loadWeatherEvent(
@@ -35,5 +36,18 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
     } catch (_) {
       emit(ErrorLoadingWeatherState(state.model));
     }
+  }
+
+  void _changeDateEvent(
+    ChangeDateEvent event,
+    Emitter<ReservationState> emit,
+  ) async {
+    emit(
+      ChangedDateState(
+        state.model.copyWith(
+          date: event.date,
+        ),
+      ),
+    );
   }
 }
