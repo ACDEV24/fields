@@ -3,6 +3,7 @@ import 'package:fields/app/models/field.dart';
 import 'package:fields/app/modules/dashboard/childs/reservation/bloc/bloc.dart';
 import 'package:fields/app/utils/extensions.dart';
 import 'package:fields/app/utils/theme.dart';
+import 'package:fields/app/utils/toasts.dart';
 import 'package:fields/app/widgets/input.dart';
 import 'package:fields/app/widgets/network_image.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,8 @@ class _Content extends StatelessWidget {
       text: Modular.get<ReservationBloc>().state.model.date?.format,
     );
 
-    return BlocBuilder<ReservationBloc, ReservationState>(
+    return BlocConsumer<ReservationBloc, ReservationState>(
+      listener: (context, state) {},
       builder: (context, state) {
         final field = state.model.field;
 
@@ -45,7 +47,6 @@ class _Content extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -54,6 +55,18 @@ class _Content extends StatelessWidget {
                 fontSize: 16.0,
               ),
             ),
+            actions: [
+              IconButton(
+                onPressed: !state.model.readyToSave
+                    ? null
+                    : () {
+                        Modular.get<ReservationBloc>().add(
+                          const SaveReservationEvent(),
+                        );
+                      },
+                icon: const Icon(Icons.save),
+              ),
+            ],
             centerTitle: true,
           ),
           body: ListView(
@@ -71,47 +84,16 @@ class _Content extends StatelessWidget {
                   ),
                 ),
               ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final Field? selectedField = await Modular.to.pushNamed(
-                      '/dashboard/field/select',
-                      arguments: field,
-                    );
-
-                    if (selectedField == null) return;
-
-                    Modular.get<ReservationBloc>().add(
-                      ChangeFieldEvent(selectedField),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0.0,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(25.0),
-                      ),
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 12.0,
-                    ),
-                    child: Text(
-                      'Cambiar cancha',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              _ChangeField(field: field),
               const SizedBox(height: 16.0),
-              const FieldsInput(
+              FieldsInput(
+                initialValue: state.model.userName,
                 hintText: 'Nombre de quien reserva',
+                onChanged: (value) {
+                  Modular.get<ReservationBloc>().add(
+                    ChangeUserNameEvent(value),
+                  );
+                },
               ),
               const SizedBox(height: 16.0),
               _SelectDate(controller: controller),
@@ -121,6 +103,64 @@ class _Content extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  void listener(BuildContext context, ReservationState state) {
+    if (state is SavedReservationState) {
+      Fields.showSuccess('Reserva guardada');
+      Modular.to.popUntil(ModalRoute.withName('/dashboard/'));
+    }
+  }
+}
+
+class _ChangeField extends StatelessWidget {
+  final Field? field;
+
+  const _ChangeField({
+    Key? key,
+    required this.field,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () async {
+          final Field? selectedField = await Modular.to.pushNamed(
+            '/dashboard/field/select',
+            arguments: field,
+          );
+
+          if (selectedField == null) return;
+
+          Modular.get<ReservationBloc>().add(
+            ChangeFieldEvent(selectedField),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(25.0),
+            ),
+          ),
+        ),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 20.0,
+            vertical: 12.0,
+          ),
+          child: Text(
+            'Cambiar cancha',
+            style: TextStyle(
+              fontSize: 14.0,
+              color: AppColors.primary,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -142,6 +182,7 @@ class _SelectDate extends StatelessWidget {
           hasFocus: false,
           hintText: 'Fecha en la que quiere reservar',
           onTap: () async {
+            FocusManager.instance.primaryFocus?.unfocus();
             final picked = await showDatePicker(
               context: context,
               initialDate: state.model.date ?? DateTime.now(),

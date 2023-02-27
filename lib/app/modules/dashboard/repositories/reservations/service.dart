@@ -25,22 +25,26 @@ class ReservationsService {
     return reservation;
   }
 
-  Future<Reservation> createReservation(Reservation reservation) async {
+  Future<Reservation> createReservation({
+    required String userName,
+    required String fieldUuid,
+    required DateTime date,
+  }) async {
     final uuid = const Uuid().v1();
     final response = await repository.createReservation(
-      uuid,
-      reservation.userName,
-      reservation.fieldUuid,
-      reservation.date,
+      uuid: uuid,
+      userName: userName,
+      fieldUuid: fieldUuid,
+      date: date,
     );
 
     if (response == 0) {
       throw Exception('Failed to create reservation');
     }
 
-    return reservation.copyWith(
-      uuid: uuid,
-    );
+    final reservation = await getReservationByUuid(uuid);
+
+    return reservation;
   }
 
   Future<Reservation> updateReservation({

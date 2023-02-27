@@ -1,6 +1,7 @@
 import 'package:fields/app/models/field.dart';
 import 'package:fields/app/models/weather.dart';
 import 'package:fields/app/modules/dashboard/childs/reservation/repository.dart';
+import 'package:fields/app/modules/dashboard/repositories/reservations/service.dart';
 import 'package:fields/app/utils/log.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,13 +12,17 @@ part 'state.dart';
 
 class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
   final ReservationWeatherRepository repository;
+  final ReservationsService reservationsService;
 
   ReservationBloc({
     required this.repository,
+    required this.reservationsService,
   }) : super(const InitialState(Model())) {
     on<LoadWeatherEvent>(_loadWeatherEvent);
+    on<ChangeUserNameEvent>(_changeUserNameEvent);
     on<ChangeDateEvent>(_changeDateEvent);
     on<ChangeFieldEvent>(_changeFieldEvent);
+    on<SaveReservationEvent>(_saveReservationEvent);
   }
 
   void _loadWeatherEvent(
@@ -40,6 +45,38 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
       AppLogger.error(error, stackTrace);
       emit(ErrorLoadingWeatherState(state.model));
     }
+  }
+
+  void _saveReservationEvent(
+    SaveReservationEvent event,
+    Emitter<ReservationState> emit,
+  ) async {
+    emit(SavingReservationState(state.model));
+
+    try {
+      await reservationsService.createReservation(
+        fieldUuid: state.model.field!.uuid,
+        date: state.model.date!,
+        userName: state.model.userName,
+      );
+      emit(SavedReservationState(state.model));
+    } catch (error, stackTrace) {
+      AppLogger.error(error, stackTrace);
+      emit(ErrorSavingReservationState(state.model));
+    }
+  }
+
+  void _changeUserNameEvent(
+    ChangeUserNameEvent event,
+    Emitter<ReservationState> emit,
+  ) async {
+    emit(
+      ChangedFieldState(
+        state.model.copyWith(
+          userName: event.userName,
+        ),
+      ),
+    );
   }
 
   void _changeFieldEvent(

@@ -60,7 +60,7 @@ class FieldsRepository {
 
   Future<List<Map<String, Object?>>> getFieldByUuid(String uuid) async {
     return await database.rawQuery(
-      'SELECT * FROM ${DatabaseConfig.fieldsDBName} WHERE uuid = $uuid',
+      'SELECT * FROM ${DatabaseConfig.fieldsDBName} WHERE uuid = \'$uuid\'',
     );
   }
 
@@ -72,13 +72,13 @@ class FieldsRepository {
     String? image,
   }) async {
     return await database.rawUpdate(
-      'UPDATE ${DatabaseConfig.fieldsDBName} SET name = $name, description = $description, price = $price, image = $image WHERE uuid = $uuid',
+      'UPDATE ${DatabaseConfig.fieldsDBName} SET name = \'$name\', description = \'$description\', price = \'$price\', image = \'$image\' WHERE uuid = \'$uuid\'',
     );
   }
 
   Future<int> deleteField(String uuid) async {
     return await database.rawDelete(
-      'DELETE FROM ${DatabaseConfig.fieldsDBName} WHERE uuid = $uuid',
+      'DELETE FROM ${DatabaseConfig.fieldsDBName} WHERE uuid = \'$uuid\'',
     );
   }
 }

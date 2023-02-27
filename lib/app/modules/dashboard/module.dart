@@ -32,6 +32,7 @@ class DashboardModule extends Module {
     Bind.lazySingleton(
       (i) => ReservationBloc(
         repository: i.get(),
+        reservationsService: i.get(),
       ),
     ),
     Bind.lazySingleton(

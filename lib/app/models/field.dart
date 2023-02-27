@@ -35,7 +35,7 @@ class Field {
       name: json['name'] ?? '',
       description: json['description'] ?? '',
       image: json['image'] ?? '',
-      price: json['price'] ?? '',
+      price: json['price'] ?? 0.0,
     );
   }
 
