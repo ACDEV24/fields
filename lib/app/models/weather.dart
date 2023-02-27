@@ -47,13 +47,13 @@ class Weather {
 
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
-      latitude: json['latitude']?.toDouble(),
-      longitude: json['longitude']?.toDouble(),
-      generationtimeMs: json['generationtime_ms']?.toDouble(),
-      utcOffsetSeconds: json['utc_offset_seconds'],
-      timezone: json['timezone'],
-      timezoneAbbreviation: json['timezone_abbreviation'],
-      elevation: json['elevation'],
+      latitude: json['latitude']?.toDouble() ?? 0.0,
+      longitude: json['longitude']?.toDouble() ?? 0.0,
+      generationtimeMs: json['generationtime_ms']?.toDouble() ?? 0.0,
+      utcOffsetSeconds: json['utc_offset_seconds'] ?? 0,
+      timezone: json['timezone'] ?? '',
+      timezoneAbbreviation: json['timezone_abbreviation'] ?? '',
+      elevation: json['elevation'] ?? 0,
       hourlyUnits: HourlyUnits.fromJson(json['hourly_units'] ?? {}),
       hourly: Hourly.fromJson(json['hourly'] ?? {}),
     );
@@ -100,19 +100,19 @@ class Hourly {
 
   factory Hourly.fromJson(Map<String, dynamic> json) {
     return Hourly(
-      time: List<DateTime>.from(
+      time: List<DateTime?>.from(
         (json['time'] ?? []).map(
           (x) => DateTime.tryParse(x),
         ),
       ),
       temperature2M: List<double?>.from(
         (json['temperature_2m'] ?? []).map(
-          (x) => x?.toDouble(),
+          (x) => x?.toDouble() ?? 0.0,
         ),
       ),
       precipitationProbability: List<num?>.from(
         (json['precipitation_probability'] ?? []).map(
-          (x) => x,
+          (x) => x ?? 0,
         ),
       ),
     );

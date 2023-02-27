@@ -28,7 +28,15 @@ class ChangeDateEvent extends ReservationEvent {
 }
 
 class SaveReservationEvent extends ReservationEvent {
-  const SaveReservationEvent();
+  final String userName;
+  final String fieldUuid;
+  final DateTime date;
+
+  const SaveReservationEvent({
+    required this.userName,
+    required this.fieldUuid,
+    required this.date,
+  });
 }
 
 class ClearEvent extends ReservationEvent {

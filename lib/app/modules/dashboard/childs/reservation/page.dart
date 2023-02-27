@@ -63,7 +63,11 @@ class _Content extends StatelessWidget {
                     ? null
                     : () {
                         Modular.get<ReservationBloc>().add(
-                          const SaveReservationEvent(),
+                          SaveReservationEvent(
+                            fieldUuid: field.uuid,
+                            date: state.model.date!,
+                            userName: state.model.userName,
+                          ),
                         );
                       },
                 icon: const Icon(Icons.save),

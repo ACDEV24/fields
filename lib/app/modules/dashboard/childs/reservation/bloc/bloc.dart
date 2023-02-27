@@ -56,9 +56,9 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
 
     try {
       await reservationsService.createReservation(
-        fieldUuid: state.model.field!.uuid,
-        date: state.model.date!,
-        userName: state.model.userName,
+        fieldUuid: event.fieldUuid,
+        date: event.date,
+        userName: event.userName,
       );
       emit(SavedReservationState(state.model));
     } catch (error, stackTrace) {
@@ -72,7 +72,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
     Emitter<ReservationState> emit,
   ) async {
     emit(
-      ChangedFieldState(
+      ChangedUserNameState(
         state.model.copyWith(
           userName: event.userName,
         ),

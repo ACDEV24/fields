@@ -204,8 +204,9 @@ class _Detail extends StatelessWidget {
                             arguments: field,
                           );
 
-                          Modular.get<ReservationBloc>()
-                              .add(const ClearEvent());
+                          Modular.get<ReservationBloc>().add(
+                            const ClearEvent(),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,

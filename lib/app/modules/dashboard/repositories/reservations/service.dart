@@ -41,7 +41,7 @@ class ReservationsService {
     return reservation;
   }
 
-  Future<Reservation> createReservation({
+  Future<void> createReservation({
     required String userName,
     required String fieldUuid,
     required DateTime date,
@@ -57,10 +57,6 @@ class ReservationsService {
     if (response == 0) {
       throw Exception('Failed to create reservation');
     }
-
-    final reservation = await getReservationByUuid(uuid);
-
-    return reservation;
   }
 
   Future<Reservation> updateReservation({
