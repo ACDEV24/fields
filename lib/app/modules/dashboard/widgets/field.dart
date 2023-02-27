@@ -70,6 +70,25 @@ class FieldWidget extends StatelessWidget {
                             fontSize: 12.0,
                           ),
                         ),
+                        const SizedBox(height: 12.0),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Numero de reservas: ',
+                            style: const TextStyle(
+                              fontSize: 10.0,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: '${field.numReservations}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         const SizedBox(height: 8),
                       ],
                     ),

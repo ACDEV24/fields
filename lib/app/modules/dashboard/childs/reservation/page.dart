@@ -186,8 +186,11 @@ class _SelectDate extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ReservationBloc, ReservationState>(
       builder: (context, state) {
+        final field = state.model.field;
         final reservations =
-            Modular.get<DashboardBloc>().state.model.reservations;
+            Modular.get<DashboardBloc>().state.model.reservations.where(
+                  (r) => r.fieldUuid == field?.uuid,
+                );
 
         final selectedDays = reservations.map((r) {
           return r.date.format;
