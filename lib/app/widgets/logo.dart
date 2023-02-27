@@ -7,15 +7,19 @@ class FieldsLogo extends StatelessWidget {
 
   const FieldsLogo({
     Key? key,
-    this.height,
-    this.width,
+    this.height = 100.0,
+    this.width = 100.0,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FadeIn(
-      child: const Center(
-        child: Icon(Icons.wallet),
+      child: Center(
+        child: Image.asset(
+          'assets/logo.png',
+          height: height,
+          width: width,
+        ),
       ),
     );
   }

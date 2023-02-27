@@ -4,40 +4,41 @@ import 'package:uuid/uuid.dart';
 class FieldsRepository {
   final database = DatabaseConfig.database;
 
-  FieldsRepository() {
-    getFields().then((value) {
-      if (value.isNotEmpty) return;
+  static Future<void> init() async {
+    final repo = FieldsRepository();
+    final fields = await repo.getFields();
 
-      createField(
-        uuid: const Uuid().v1(),
-        name: 'A',
-        description:
-            'Cancha A es una cancha de futbol de césped natural con iluminación, ideal para jugar con tus amigos.',
-        price: 10.0,
-        image:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Cancha_sintetica.jpg/1200px-Cancha_sintetica.jpg',
-      );
+    if (fields.isNotEmpty) return;
 
-      createField(
-        uuid: const Uuid().v1(),
-        name: 'B',
-        description:
-            'Cancha B es una cancha de Tenis con piso de goma para amortiguar el impacto de la pelota. Cuenta con iluminación y es al aire libre.',
-        price: 15.0,
-        image:
-            'https://universal-sport-instalaciones.com/sites/default/files/2021-02/el%20estadio%20%284%29_0.jpg',
-      );
+    repo.createField(
+      uuid: const Uuid().v1(),
+      name: 'A',
+      description:
+          'Cancha A es una cancha de futbol de césped natural con iluminación, ideal para jugar con tus amigos.',
+      price: 10.0,
+      image:
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Cancha_sintetica.jpg/1200px-Cancha_sintetica.jpg',
+    );
 
-      createField(
-        uuid: const Uuid().v1(),
-        name: 'C',
-        description:
-            'Cancha C es una cancha multiple, puedes jugar basketball, futbol y voleyball. Cuenta con iluminación para jugar a la hora que desees con tus amigos.',
-        price: 20.0,
-        image:
-            'https://www.parqueygrama.com/wp-content/uploads/2018/11/construccion-de-cancha-multiple.jpg',
-      );
-    });
+    repo.createField(
+      uuid: const Uuid().v1(),
+      name: 'B',
+      description:
+          'Cancha B es una cancha de Tenis con piso de goma para amortiguar el impacto de la pelota. Cuenta con iluminación y es al aire libre.',
+      price: 15.0,
+      image:
+          'https://universal-sport-instalaciones.com/sites/default/files/2021-02/el%20estadio%20%284%29_0.jpg',
+    );
+
+    repo.createField(
+      uuid: const Uuid().v1(),
+      name: 'C',
+      description:
+          'Cancha C es una cancha multiple, puedes jugar basketball, futbol y voleyball. Cuenta con iluminación para jugar a la hora que desees con tus amigos.',
+      price: 20.0,
+      image:
+          'https://www.parqueygrama.com/wp-content/uploads/2018/11/construccion-de-cancha-multiple.jpg',
+    );
   }
 
   Future<int> createField({

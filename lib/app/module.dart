@@ -10,7 +10,7 @@ class AppModule extends Module {
   @override
   final List<Bind> binds = [
     Bind(
-      (i) => DatabaseConfig()..init(),
+      (i) => DatabaseConfig(),
       isSingleton: true,
       isLazy: false,
     ),
