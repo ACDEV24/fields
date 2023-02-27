@@ -4,6 +4,7 @@ class Field {
   final String description;
   final String image;
   final double price;
+  final int numReservations;
 
   const Field({
     required this.uuid,
@@ -11,6 +12,7 @@ class Field {
     required this.description,
     required this.image,
     required this.price,
+    this.numReservations = 0,
   });
 
   Field copyWith({
@@ -19,6 +21,7 @@ class Field {
     String? description,
     String? image,
     double? price,
+    int? numReservations,
   }) {
     return Field(
       uuid: uuid ?? this.uuid,
@@ -26,6 +29,7 @@ class Field {
       description: description ?? this.description,
       image: image ?? this.image,
       price: price ?? this.price,
+      numReservations: numReservations ?? this.numReservations,
     );
   }
 
@@ -36,6 +40,7 @@ class Field {
       description: json['description'] ?? '',
       image: json['image'] ?? '',
       price: json['price'] ?? 0.0,
+      numReservations: json['num_reservations'] ?? 0,
     );
   }
 
@@ -45,6 +50,7 @@ class Field {
       'name': name,
       'image': image,
       'price': price,
+      'num_reservations': numReservations,
     };
   }
 }

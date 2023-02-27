@@ -19,6 +19,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   }) : super(const InitialState(Model())) {
     on<LoadFieldsEvent>(_loadFieldsEvent);
     on<LoadReservationsEvent>(_loadReservationsEvent);
+    on<ChangeIndexEvent>(_changeIndexEvent);
+    on<DeleteReservationEvent>(_deleteReservationEvent);
   }
 
   void _loadFieldsEvent(
@@ -60,6 +62,32 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       );
     } catch (_) {
       emit(ErrorLoadingReservationsState(state.model));
+    }
+  }
+
+  void _changeIndexEvent(
+    ChangeIndexEvent event,
+    Emitter<DashboardState> emit,
+  ) async {
+    emit(
+      ChangeIndexState(
+        state.model.copyWith(
+          index: event.index,
+        ),
+      ),
+    );
+  }
+
+  void _deleteReservationEvent(
+    DeleteReservationEvent event,
+    Emitter<DashboardState> emit,
+  ) async {
+    emit(DeletingReservationsState(state.model));
+    try {
+      await reservationsService.deleteReservation(event.uuid);
+      emit(DeletedReservationsState(state.model));
+    } catch (_) {
+      emit(ErrorDeletingReservationsState(state.model));
     }
   }
 }

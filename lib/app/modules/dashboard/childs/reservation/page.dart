@@ -1,7 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:fields/app/models/field.dart';
+import 'package:fields/app/modules/dashboard/bloc/bloc.dart';
 import 'package:fields/app/modules/dashboard/childs/reservation/bloc/bloc.dart';
 import 'package:fields/app/utils/extensions.dart';
+import 'package:fields/app/utils/loading.dart';
 import 'package:fields/app/utils/theme.dart';
 import 'package:fields/app/utils/toasts.dart';
 import 'package:fields/app/widgets/input.dart';
@@ -38,7 +40,7 @@ class _Content extends StatelessWidget {
     );
 
     return BlocConsumer<ReservationBloc, ReservationState>(
-      listener: (context, state) {},
+      listener: listener,
       builder: (context, state) {
         final field = state.model.field;
 
@@ -107,9 +109,16 @@ class _Content extends StatelessWidget {
   }
 
   void listener(BuildContext context, ReservationState state) {
+    if (state is SavingReservationState) {
+      Loading.show(context);
+    }
+
     if (state is SavedReservationState) {
       Fields.showSuccess('Reserva guardada');
-      Modular.to.popUntil(ModalRoute.withName('/dashboard/'));
+      Modular.get<DashboardBloc>().add(const LoadReservationsEvent());
+      Future.delayed(const Duration(milliseconds: 300), () {
+        Modular.to.popUntil(ModalRoute.withName('/dashboard/'));
+      });
     }
   }
 }
@@ -177,6 +186,15 @@ class _SelectDate extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ReservationBloc, ReservationState>(
       builder: (context, state) {
+        final reservations =
+            Modular.get<DashboardBloc>().state.model.reservations;
+
+        final selectedDays = reservations.map((r) {
+          return r.date.format;
+        }).toList();
+
+        final firstDate = getFirstDate(selectedDays, DateTime.now());
+
         return FieldsInput(
           controller: controller,
           hasFocus: false,
@@ -185,9 +203,12 @@ class _SelectDate extends StatelessWidget {
             FocusManager.instance.primaryFocus?.unfocus();
             final picked = await showDatePicker(
               context: context,
-              initialDate: state.model.date ?? DateTime.now(),
-              firstDate: DateTime.now(),
+              initialDate: state.model.date ?? firstDate,
+              firstDate: firstDate,
               lastDate: DateTime(2023, 03, 14),
+              selectableDayPredicate: (date) {
+                return !selectedDays.contains(date.format);
+              },
             );
 
             if (picked != null) {
@@ -205,6 +226,12 @@ class _SelectDate extends StatelessWidget {
         );
       },
     );
+  }
+
+  DateTime getFirstDate(List<String> selectedDays, DateTime date) {
+    return !selectedDays.contains(date.format)
+        ? date
+        : getFirstDate(selectedDays, date.add(const Duration(days: 1)));
   }
 }
 

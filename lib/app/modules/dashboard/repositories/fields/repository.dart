@@ -54,7 +54,7 @@ class FieldsRepository {
 
   Future<List<Map<String, Object?>>> getFields() async {
     return await database.rawQuery(
-      'SELECT * FROM ${DatabaseConfig.fieldsDBName}',
+      'SELECT f.*, COUNT(b.field_uuid) AS num_reservations FROM ${DatabaseConfig.fieldsDBName} f LEFT JOIN ${DatabaseConfig.reservationsDBName} b ON f.uuid = b.field_uuid GROUP BY f.uuid, f.name;',
     );
   }
 

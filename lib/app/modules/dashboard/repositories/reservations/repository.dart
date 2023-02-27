@@ -5,7 +5,7 @@ class ReservationsRepository {
 
   Future<List<Map<String, Object?>>> getReservations() async {
     return await database.rawQuery(
-      'SELECT b.*, f.* FROM ${DatabaseConfig.reservationsDBName} b INNER JOIN fields f ON b.field_uuid = f.uuid',
+      'SELECT * FROM ${DatabaseConfig.reservationsDBName}',
     );
   }
 

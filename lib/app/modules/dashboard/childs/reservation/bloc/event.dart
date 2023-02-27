@@ -30,3 +30,7 @@ class ChangeDateEvent extends ReservationEvent {
 class SaveReservationEvent extends ReservationEvent {
   const SaveReservationEvent();
 }
+
+class ClearEvent extends ReservationEvent {
+  const ClearEvent();
+}

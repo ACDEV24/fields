@@ -1,19 +1,35 @@
 import 'package:fields/app/models/reservation.dart';
+import 'package:fields/app/modules/dashboard/repositories/fields/service.dart';
 import 'package:fields/app/modules/dashboard/repositories/reservations/repository.dart';
 import 'package:uuid/uuid.dart';
 
 class ReservationsService {
   final ReservationsRepository repository;
+  final FieldsService fieldsService;
 
   const ReservationsService({
     required this.repository,
+    required this.fieldsService,
   });
 
   Future<List<Reservation>> getReservations() async {
     final reservations = await repository.getReservations();
-    return reservations
+    final reservationsModel = reservations
         .map((reservation) => Reservation.fromJson(reservation))
         .toList();
+
+    final result = <Reservation>[];
+
+    for (final reservation in reservationsModel) {
+      final field = await fieldsService.getFieldByUuid(reservation.fieldUuid);
+      result.add(
+        reservation.copyWith(
+          field: field,
+        ),
+      );
+    }
+
+    return result;
   }
 
   Future<Reservation> getReservationByUuid(String uuid) async {

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:animated_widgets/widgets/translation_animated.dart';
 import 'package:fields/app/models/field.dart';
 import 'package:fields/app/modules/dashboard/childs/detail/bloc/bloc.dart';
+import 'package:fields/app/modules/dashboard/childs/reservation/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart'
@@ -197,11 +198,14 @@ class _Detail extends StatelessWidget {
                         ],
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          Modular.to.pushNamed(
+                        onPressed: () async {
+                          await Modular.to.pushNamed(
                             '/dashboard/field/reservation',
                             arguments: field,
                           );
+
+                          Modular.get<ReservationBloc>()
+                              .add(const ClearEvent());
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,

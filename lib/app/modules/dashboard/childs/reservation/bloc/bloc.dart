@@ -23,6 +23,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
     on<ChangeDateEvent>(_changeDateEvent);
     on<ChangeFieldEvent>(_changeFieldEvent);
     on<SaveReservationEvent>(_saveReservationEvent);
+    on<ClearEvent>(_clearEvent);
   }
 
   void _loadWeatherEvent(
@@ -103,5 +104,12 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
         ),
       ),
     );
+  }
+
+  void _clearEvent(
+    ClearEvent event,
+    Emitter<ReservationState> emit,
+  ) async {
+    emit(const InitialState(Model()));
   }
 }
